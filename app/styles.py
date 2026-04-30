@@ -11,11 +11,12 @@ def apply_page_styles() -> None:
         """
 <style>
     :root {
-        --app-panel: rgba(255, 255, 255, 0.88);
-        --app-panel-soft: rgba(248, 250, 252, 0.94);
+        --app-bg: var(--background-color, #f6f7fb);
+        --app-panel: var(--secondary-background-color, #ffffff);
+        --app-ink: var(--text-color, #172033);
         --app-line: rgba(100, 116, 139, 0.24);
         --app-shadow: rgba(15, 23, 42, 0.10);
-        --app-accent: #0f766e;
+        --app-accent: var(--primary-color, #0f766e);
         --app-accent-strong: #155e75;
         --app-rose: #be123c;
         --app-amber: #b45309;
@@ -30,7 +31,8 @@ def apply_page_styles() -> None:
     .stApp {
         background:
             linear-gradient(180deg, rgba(15, 118, 110, 0.07), transparent 22rem),
-            #f6f7fb;
+            var(--app-bg);
+        color: var(--app-ink);
     }
 
     .block-container {
@@ -144,7 +146,7 @@ def apply_page_styles() -> None:
         border: 1px solid var(--app-line);
         border-radius: 8px;
         box-shadow: 0 10px 28px var(--app-shadow);
-        color: inherit;
+        color: var(--app-ink);
     }
 
     .status-tile {
@@ -193,7 +195,7 @@ def apply_page_styles() -> None:
         background: var(--app-panel);
         border: 1px solid var(--app-line);
         border-radius: 8px;
-        color: inherit !important;
+        color: var(--app-ink) !important;
         font-weight: 750;
         padding: 0.65rem 1rem;
     }

@@ -5,8 +5,8 @@ headless = true
 gatherUsageStats = false
 
 [theme.light]
-primaryColor = "#0f9f8f"
-backgroundColor = "#f7fafc"
+primaryColor = "#0f766e"
+backgroundColor = "#f6f7fb"
 secondaryBackgroundColor = "#ffffff"
 textColor = "#172033"
 
