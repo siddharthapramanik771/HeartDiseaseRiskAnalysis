@@ -1,0 +1,56 @@
+name: Train and Validate
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/ci.yml"
+      - "data/**"
+      - "src/**"
+      - "requirements.txt"
+      - "requirements-train.txt"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: requirements-train.txt
+
+      - name: Install training dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-train.txt
+
+      - name: Compile Python files
+        run: python -m py_compile $(git ls-files '*.py')
+
+      - name: Train model
+        run: python -m src.train
+
+      - name: Commit trained artifacts
+        run: |
+          git add models/model.joblib models/training_metrics.json
+
+          if git diff --cached --quiet; then
+            echo "Training artifacts unchanged."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update trained heart disease artifacts [skip ci]"
+          git push

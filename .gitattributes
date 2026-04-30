@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Trained model artifacts are binary joblib files.
+models/*.joblib binary

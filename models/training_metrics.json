@@ -1,0 +1,80 @@
+{
+  "selected_model": "KNN",
+  "model_metrics": {
+    "Random Forest": {
+      "test_accuracy": 0.8347826086956521,
+      "test_precision": 0.8449612403100775,
+      "test_recall": 0.8582677165354331,
+      "test_f1": 0.8515625,
+      "test_roc_auc": 0.9246999464872715,
+      "confusion_matrix": [
+        [
+          83,
+          20
+        ],
+        [
+          18,
+          109
+        ]
+      ]
+    },
+    "KNN": {
+      "test_accuracy": 0.8565217391304348,
+      "test_precision": 0.8615384615384616,
+      "test_recall": 0.8818897637795275,
+      "test_f1": 0.8715953307392996,
+      "test_roc_auc": 0.9137680605458299,
+      "confusion_matrix": [
+        [
+          85,
+          18
+        ],
+        [
+          15,
+          112
+        ]
+      ]
+    }
+  },
+  "training_data_path": "data/heart_disease_uci.csv",
+  "training_data_name": "heart_disease_uci.csv",
+  "target_column": "num",
+  "id_column": "id",
+  "binary_target": "heart_disease",
+  "positive_target_label": "Heart disease",
+  "negative_target_label": "No heart disease",
+  "prediction_threshold": 0.5,
+  "include_dataset_feature": false,
+  "train_rows": 690,
+  "test_rows": 230,
+  "numeric_columns": [
+    "age",
+    "trestbps",
+    "chol",
+    "thalch",
+    "oldpeak",
+    "ca"
+  ],
+  "categorical_columns": [
+    "sex",
+    "cp",
+    "fbs",
+    "restecg",
+    "exang",
+    "slope",
+    "thal"
+  ],
+  "settings": {
+    "candidate_models": [
+      "Random Forest",
+      "KNN"
+    ],
+    "random_state": 42,
+    "test_size": 0.25,
+    "selection_metric": "test_f1",
+    "random_forest_estimators": 300,
+    "random_forest_max_depth": 8,
+    "random_forest_min_samples_leaf": 2,
+    "knn_neighbors": 9
+  }
+}
