@@ -11,34 +11,26 @@ def apply_page_styles() -> None:
         """
 <style>
     :root {
-        --app-bg: var(--background-color, #f6f7fb);
-        --app-panel: var(--secondary-background-color, #ffffff);
-        --app-ink: var(--text-color, #172033);
-        --app-line: rgba(100, 116, 139, 0.24);
-        --app-shadow: rgba(15, 23, 42, 0.10);
-        --app-accent: var(--primary-color, #0f766e);
-        --app-accent-strong: #155e75;
-        --app-rose: #be123c;
-        --app-amber: #b45309;
-        --sidebar-bg-start: #132238;
-        --sidebar-bg-end: #17454c;
+        --app-panel: rgba(127, 127, 127, 0.10);
+        --app-panel-hover: rgba(127, 127, 127, 0.16);
+        --app-line: rgba(127, 127, 127, 0.24);
+        --app-shadow: rgba(0, 0, 0, 0.10);
+        --app-accent: #0f9f8f;
+        --app-accent-strong: #0a6f86;
+        --sidebar-bg-start: #102033;
+        --sidebar-bg-end: #17374b;
         --sidebar-ink: #f8fbfc;
-        --sidebar-muted: #d9e8ee;
-        --tab-active-bg: #123549;
+        --sidebar-muted: #d8e7ef;
+        --button-bg: #ffffff;
+        --button-ink: #102033;
+        --tab-active-bg: #10334a;
         --tab-active-ink: #ffffff;
-    }
-
-    .stApp {
-        background:
-            linear-gradient(180deg, rgba(15, 118, 110, 0.07), transparent 22rem),
-            var(--app-bg);
-        color: var(--app-ink);
     }
 
     .block-container {
         padding-top: 2rem;
         padding-bottom: 3rem;
-        max-width: 1260px;
+        max-width: 1240px;
     }
 
     [data-testid="stSidebar"] {
@@ -54,31 +46,47 @@ def apply_page_styles() -> None:
         color: var(--sidebar-ink);
     }
 
-    [data-testid="stSidebar"] small,
-    [data-testid="stSidebar"] [data-testid="stCaptionContainer"] * {
+    [data-testid="stSidebar"] [data-testid="stCaptionContainer"] *,
+    [data-testid="stSidebar"] small {
         color: var(--sidebar-muted);
     }
 
     [data-testid="stSidebar"] [data-testid="stDownloadButton"] button,
-    [data-testid="stSidebar"] [data-testid="stLinkButton"] a {
-        background: #ffffff;
+    [data-testid="stSidebar"] [data-testid="stLinkButton"] a,
+    [data-testid="stSidebar"] .stButton > a,
+    [data-testid="stSidebar"] .stButton > button {
+        background: var(--button-bg);
         border: 1px solid rgba(255, 255, 255, 0.22);
-        color: #132238 !important;
+        color: var(--button-ink) !important;
         width: 100%;
     }
 
     [data-testid="stSidebar"] [data-testid="stDownloadButton"] button *,
-    [data-testid="stSidebar"] [data-testid="stLinkButton"] a * {
-        color: #132238 !important;
+    [data-testid="stSidebar"] [data-testid="stLinkButton"] a *,
+    [data-testid="stSidebar"] .stButton > a *,
+    [data-testid="stSidebar"] .stButton > button * {
+        color: var(--button-ink) !important;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stDownloadButton"] button:hover,
+    [data-testid="stSidebar"] [data-testid="stDownloadButton"] button:focus,
+    [data-testid="stSidebar"] [data-testid="stDownloadButton"] button:active,
+    [data-testid="stSidebar"] [data-testid="stLinkButton"] a:hover,
+    [data-testid="stSidebar"] [data-testid="stLinkButton"] a:focus,
+    [data-testid="stSidebar"] [data-testid="stLinkButton"] a:active,
+    [data-testid="stSidebar"] .stButton > a:hover,
+    [data-testid="stSidebar"] .stButton > button:hover {
+        background: var(--button-bg);
+        color: var(--button-ink) !important;
     }
 
     .hero {
-        border: 1px solid rgba(255, 255, 255, 0.32);
+        border: 1px solid rgba(255, 255, 255, 0.26);
         border-radius: 8px;
-        padding: 2.1rem 2.35rem;
+        padding: 2.15rem 2.35rem;
         background:
-            radial-gradient(circle at 86% 22%, rgba(250, 204, 21, 0.20), transparent 22%),
-            linear-gradient(135deg, rgba(19, 34, 56, 0.98), rgba(15, 118, 110, 0.88));
+            linear-gradient(135deg, rgba(18, 34, 53, 0.96), rgba(10, 111, 134, 0.9)),
+            linear-gradient(135deg, #102033, #0f9f8f);
         box-shadow: 0 18px 45px var(--app-shadow);
         color: #ffffff;
         margin-bottom: 1.1rem;
@@ -86,9 +94,9 @@ def apply_page_styles() -> None:
     }
 
     .hero__eyebrow {
-        color: #b8eee6;
+        color: #bceee7;
         font-size: 0.82rem;
-        font-weight: 800;
+        font-weight: 700;
         letter-spacing: 0;
         margin-bottom: 0.55rem;
         text-transform: uppercase;
@@ -96,15 +104,15 @@ def apply_page_styles() -> None:
 
     .hero h1 {
         color: #ffffff;
-        font-size: clamp(2.05rem, 4vw, 4rem);
+        font-size: clamp(2.1rem, 4vw, 4.1rem);
         line-height: 1.02;
         margin: 0 0 0.85rem;
     }
 
     .hero p {
-        color: rgba(255, 255, 255, 0.88);
+        color: rgba(255, 255, 255, 0.86);
         font-size: 1.05rem;
-        line-height: 1.62;
+        line-height: 1.65;
         max-width: 820px;
         margin: 0 0 1.25rem;
     }
@@ -119,7 +127,7 @@ def apply_page_styles() -> None:
     .hero__link {
         background: #ffffff;
         border-radius: 8px;
-        color: #132238 !important;
+        color: #102033 !important;
         display: inline-flex;
         font-weight: 800;
         padding: 0.72rem 1rem;
@@ -127,9 +135,9 @@ def apply_page_styles() -> None:
     }
 
     .hero__note {
-        color: #e2fffb;
+        color: #d8faf5;
         font-size: 0.95rem;
-        font-weight: 650;
+        font-weight: 600;
     }
 
     .status-strip {
@@ -146,7 +154,7 @@ def apply_page_styles() -> None:
         border: 1px solid var(--app-line);
         border-radius: 8px;
         box-shadow: 0 10px 28px var(--app-shadow);
-        color: var(--app-ink);
+        color: inherit;
     }
 
     .status-tile {
@@ -156,13 +164,14 @@ def apply_page_styles() -> None:
     .status-tile span {
         display: block;
         font-size: 0.78rem;
-        font-weight: 800;
+        font-weight: 700;
         margin-bottom: 0.35rem;
         opacity: 0.72;
         text-transform: uppercase;
     }
 
     .status-tile strong {
+        color: inherit;
         display: block;
         font-size: 1.35rem;
         line-height: 1.2;
@@ -176,6 +185,16 @@ def apply_page_styles() -> None:
 
     div[data-testid="stMetric"] {
         padding: 0.9rem 1rem;
+    }
+
+    div[data-testid="stMetric"] *,
+    div[data-testid="stMetricValue"] * {
+        color: inherit !important;
+    }
+
+    div[data-testid="stMetricLabel"] *,
+    div[data-testid="stMetric"] label {
+        opacity: 0.72;
     }
 
     div[data-testid="stForm"] {
@@ -195,8 +214,8 @@ def apply_page_styles() -> None:
         background: var(--app-panel);
         border: 1px solid var(--app-line);
         border-radius: 8px;
-        color: var(--app-ink) !important;
-        font-weight: 750;
+        color: inherit !important;
+        font-weight: 700;
         padding: 0.65rem 1rem;
     }
 
@@ -225,7 +244,7 @@ def apply_page_styles() -> None:
         color: #ffffff !important;
         font-weight: 800;
         min-height: 2.85rem;
-        box-shadow: 0 10px 22px rgba(15, 118, 110, 0.24);
+        box-shadow: 0 10px 22px rgba(10, 111, 134, 0.24);
     }
 
     .stButton > button *,
