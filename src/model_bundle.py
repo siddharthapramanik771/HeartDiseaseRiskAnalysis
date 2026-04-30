@@ -24,7 +24,7 @@ class ModelArtifact:
     target_column: str = "num"
     positive_target_label: str = "Heart disease"
     negative_target_label: str = "No heart disease"
-    prediction_threshold: float = 0.5
+    prediction_threshold: float = 0.65
     artifact_version: int = ARTIFACT_VERSION
 
     @classmethod
@@ -41,7 +41,7 @@ class ModelArtifact:
             target_column=payload.get("target_column", "num"),
             positive_target_label=payload.get("positive_target_label", "Heart disease"),
             negative_target_label=payload.get("negative_target_label", "No heart disease"),
-            prediction_threshold=payload.get("prediction_threshold", 0.5),
+            prediction_threshold=payload.get("prediction_threshold", 0.65),
             artifact_version=payload.get("artifact_version", 1),
         )
 

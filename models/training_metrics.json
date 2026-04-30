@@ -2,36 +2,36 @@
   "selected_model": "KNN",
   "model_metrics": {
     "Random Forest": {
-      "test_accuracy": 0.8347826086956521,
-      "test_precision": 0.8449612403100775,
-      "test_recall": 0.8582677165354331,
-      "test_f1": 0.8515625,
+      "test_accuracy": 0.8173913043478261,
+      "test_precision": 0.897196261682243,
+      "test_recall": 0.7559055118110236,
+      "test_f1": 0.8205128205128205,
       "test_roc_auc": 0.9246999464872715,
       "confusion_matrix": [
         [
-          83,
-          20
+          92,
+          11
         ],
         [
-          18,
-          109
+          31,
+          96
         ]
       ]
     },
     "KNN": {
-      "test_accuracy": 0.8565217391304348,
-      "test_precision": 0.8615384615384616,
-      "test_recall": 0.8818897637795275,
-      "test_f1": 0.8715953307392996,
+      "test_accuracy": 0.8608695652173913,
+      "test_precision": 0.8991596638655462,
+      "test_recall": 0.84251968503937,
+      "test_f1": 0.8699186991869918,
       "test_roc_auc": 0.9137680605458299,
       "confusion_matrix": [
         [
-          85,
-          18
+          91,
+          12
         ],
         [
-          15,
-          112
+          20,
+          107
         ]
       ]
     }
@@ -43,7 +43,7 @@
   "binary_target": "heart_disease",
   "positive_target_label": "Heart disease",
   "negative_target_label": "No heart disease",
-  "prediction_threshold": 0.5,
+  "prediction_threshold": 0.65,
   "include_dataset_feature": false,
   "train_rows": 690,
   "test_rows": 230,

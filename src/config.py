@@ -31,7 +31,7 @@ class RuntimeConfig:
             id_column="id",
             positive_target_label="Heart disease",
             negative_target_label="No heart disease",
-            prediction_threshold=0.5,
+            prediction_threshold=0.65,
             include_dataset_feature=False,
         )
 

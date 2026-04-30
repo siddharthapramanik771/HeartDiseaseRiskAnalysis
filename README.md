@@ -41,8 +41,8 @@ heart_disease = 0 when num = 0
 The saved model returns a probability. The default threshold is:
 
 ```text
-probability >= 0.5 -> Heart disease
-probability < 0.5  -> No heart disease
+probability >= 0.65 -> Heart disease
+probability < 0.65  -> No heart disease
 ```
 
 ## Data Contract
