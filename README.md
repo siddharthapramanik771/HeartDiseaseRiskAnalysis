@@ -142,6 +142,46 @@ Both models use the same train/test split and preprocessing contract:
   `models/training_metrics.json`
 - the dashboard reads the saved metrics artifact dynamically
 
+### Model Structure
+
+The saved model at `models/model.joblib` is a `ModelArtifact` wrapper around one
+fitted scikit-learn `Pipeline`. The pipeline contains a preprocessing step and a
+classifier step. Training builds the same preprocessing structure for each
+candidate classifier, evaluates the candidates on the same holdout set, then
+saves either the best F1 model or the model selected with `--model`.
+
+```mermaid
+flowchart LR
+    A[Raw UCI rows] --> B[DataPreprocessor.clean]
+    B --> C[Feature matrix]
+    B --> D[Binary target: num > 0]
+    C --> E[Stratified train/test split]
+    E --> F[ColumnTransformer]
+    F --> G[Numeric branch: median imputer + StandardScaler]
+    F --> H[Categorical branch: Unknown imputer + OneHotEncoder]
+    G --> I[Transformed feature space]
+    H --> I
+    I --> J{Candidate classifier}
+    J --> K[Random Forest]
+    J --> L[KNN]
+    K --> M[Holdout metrics]
+    L --> M
+    M --> N[Best F1 or forced model]
+    N --> O[Saved ModelArtifact]
+    O --> P[Streamlit prediction]
+```
+
+Current feature branches:
+
+- numeric branch: `age`, `trestbps`, `chol`, `thalch`, `oldpeak`, `ca`
+- categorical branch: `sex`, `cp`, `fbs`, `restecg`, `exang`, `slope`, `thal`
+- classifier branch: `RandomForestClassifier` or `KNeighborsClassifier`
+- artifact metadata: selected model name, feature order, feature defaults,
+  target labels, prediction threshold, and artifact version
+
+The checked-in metrics currently select KNN, but this can change whenever
+`python -m src.train` is run with new data, settings, or a forced model choice.
+
 ### KNN
 
 KNN is a distance-based classifier. Scaling numeric features is important because

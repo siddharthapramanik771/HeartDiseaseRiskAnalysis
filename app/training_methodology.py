@@ -55,6 +55,7 @@ class TrainingMethodologyRenderer:
 
         self.render_workflow(payload)
         self.render_pipeline(payload)
+        self.render_model_structure(payload)
         self.render_model_details(payload)
         self.render_validation(payload)
         self.render_metric_interpretation(payload)
@@ -126,6 +127,59 @@ class TrainingMethodologyRenderer:
         st.info(
             f"The source `dataset` column is currently {dataset_note} as a model "
             "feature. Excluding it helps reduce collection-site bias."
+        )
+
+    def render_model_structure(self, payload: dict[str, Any] | None) -> None:
+        st.subheader("Model Structure")
+        numeric_columns = self.payload_value(payload, "numeric_columns", [])
+        categorical_columns = self.payload_value(payload, "categorical_columns", [])
+        selected_model = self.payload_value(payload, "selected_model", "Selected classifier")
+        threshold = float(
+            self.payload_value(payload, "prediction_threshold", self.config.prediction_threshold)
+        )
+
+        st.graphviz_chart(
+            self.model_structure_dot(str(selected_model)),
+            width="stretch",
+        )
+
+        rows = [
+            {
+                "Layer": "Artifact wrapper",
+                "Component": "ModelArtifact",
+                "Structure detail": "Stores the fitted pipeline, schema, feature defaults, labels, threshold, and version",
+            },
+            {
+                "Layer": "Pipeline step 1",
+                "Component": "ColumnTransformer",
+                "Structure detail": "Splits raw features into numeric and categorical preprocessing branches",
+            },
+            {
+                "Layer": "Numeric branch",
+                "Component": "SimpleImputer(strategy='median') + StandardScaler",
+                "Structure detail": self.feature_summary(numeric_columns),
+            },
+            {
+                "Layer": "Categorical branch",
+                "Component": "SimpleImputer(fill_value='Unknown') + OneHotEncoder(handle_unknown='ignore')",
+                "Structure detail": self.feature_summary(categorical_columns),
+            },
+            {
+                "Layer": "Pipeline step 2",
+                "Component": str(selected_model),
+                "Structure detail": "Final classifier selected by holdout F1 unless `--model` forces a candidate",
+            },
+            {
+                "Layer": "Prediction output",
+                "Component": f"Probability threshold >= {threshold:.2f}",
+                "Structure detail": "Converts disease probability into the dashboard class label",
+            },
+        ]
+        st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+        st.write(
+            "At inference time the dashboard sends one feature row through this saved "
+            "pipeline. The app does not refit preprocessing or train a model during "
+            "interactive prediction."
         )
 
     def render_model_details(self, payload: dict[str, Any] | None) -> None:
@@ -347,6 +401,63 @@ class TrainingMethodologyRenderer:
             return path.resolve().relative_to(self.config.project_root.resolve()).as_posix()
         except ValueError:
             return str(path)
+
+    @staticmethod
+    def feature_summary(columns: list[str]) -> str:
+        if not columns:
+            return "Loaded from the metrics artifact after training"
+        return f"{len(columns)} feature(s): {', '.join(columns)}"
+
+    @classmethod
+    def model_structure_dot(cls, selected_model: str) -> str:
+        selected_label = cls.escape_dot_label(selected_model)
+        return f"""
+digraph model_structure {{
+    graph [rankdir=LR, bgcolor="transparent", pad="0.2", nodesep="0.5", ranksep="0.7"];
+    node [shape=box, style="rounded,filled", fontname="Arial", fontsize=11, color="#0f172a", fillcolor="#f8fafc", fontcolor="#0f172a"];
+    edge [color="#475569", arrowsize=0.8, fontname="Arial", fontsize=10];
+
+    raw [label="Raw UCI rows"];
+    clean [label="DataPreprocessor.clean"];
+    features [label="Feature matrix"];
+    target [label="Binary target\\nnum > 0", fillcolor="#ecfeff"];
+    split [label="Stratified\\ntrain/test split"];
+    transformer [label="ColumnTransformer", fillcolor="#eef2ff"];
+    numeric [label="Numeric branch\\nmedian imputer + scaler"];
+    categorical [label="Categorical branch\\nUnknown imputer + one-hot"];
+    transformed [label="Transformed\\nfeature space"];
+    candidate [shape=diamond, label="Candidate\\nclassifier", fillcolor="#fef3c7"];
+    rf [label="Random Forest"];
+    knn [label="KNN"];
+    metrics [label="Holdout metrics"];
+    selected [label="Selected: {selected_label}", fillcolor="#dcfce7"];
+    artifact [label="ModelArtifact\\njoblib bundle", fillcolor="#fee2e2"];
+    app [label="Streamlit\\nprediction"];
+
+    raw -> clean;
+    clean -> features;
+    clean -> target;
+    features -> split;
+    target -> split;
+    split -> transformer;
+    transformer -> numeric;
+    transformer -> categorical;
+    numeric -> transformed;
+    categorical -> transformed;
+    transformed -> candidate;
+    candidate -> rf;
+    candidate -> knn;
+    rf -> metrics;
+    knn -> metrics;
+    metrics -> selected;
+    selected -> artifact;
+    artifact -> app;
+}}
+"""
+
+    @staticmethod
+    def escape_dot_label(label: str) -> str:
+        return label.replace("\\", "\\\\").replace('"', '\\"')
 
     @staticmethod
     def payload_value(payload: dict[str, Any] | None, key: str, fallback: Any) -> Any:
