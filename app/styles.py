@@ -208,6 +208,7 @@ def apply_page_styles() -> None:
 
     .stTabs [data-baseweb="tab-list"] {
         gap: 0.45rem;
+        border-bottom: 0;
     }
 
     .stTabs [data-baseweb="tab"] {
@@ -233,6 +234,10 @@ def apply_page_styles() -> None:
     }
 
     .stTabs [data-baseweb="tab-highlight"] {
+        display: none;
+    }
+
+    .stTabs [data-baseweb="tab-border"] {
         display: none;
     }
 
